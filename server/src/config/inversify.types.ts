@@ -13,5 +13,11 @@ export const TYPES = {
     Auth: {
         Service: Symbol("AuthService"),
         Controller: Symbol("AuthController")
+    },
+    Organization: {
+        Model: Symbol("OrganizationModel"),
+        Repository: Symbol("OrganizationRepository"),
+        Service: Symbol("OrganizationService"),
+        Controller: Symbol("OrganizationController"),
     }
 }

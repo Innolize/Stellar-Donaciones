@@ -6,6 +6,7 @@ import { Container } from "inversify"
 import { AuthService } from "../module/auth/service/AuthService"
 import { AuthController } from "../module/auth/controller/AuthController"
 import multer, { memoryStorage, Multer } from "multer"
+import { OrganizationModel } from "../module/organization/module"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -20,6 +21,16 @@ const configureDatabase = () => {
     })
 }
 
+const configureOrganizationModel = (container: Container) => {
+    const database = container.get<Sequelize>(TYPES.Common.Database)
+    OrganizationModel.setup(database)
+    return OrganizationModel
+}
+
+const configureOrganizationContainer = (container: Container) => {
+    container.bind<typeof OrganizationModel>(TYPES.Organization.Model).toConstantValue(configureOrganizationModel(container))
+}
+
 function configureCommonContainer(container: Container): void {
     container.bind<Sequelize>(TYPES.Common.Database).toConstantValue(configureDatabase());
     container.bind<typeof bcrypt>(TYPES.Common.Encryption).toConstantValue(bcrypt)
@@ -27,7 +38,8 @@ function configureCommonContainer(container: Container): void {
 }
 
 export function configUserModel(container: Container): typeof UserModel {
-    UserModel.setup(container.get(TYPES.Common.Database))
+    const database = container.get<Sequelize>(TYPES.Common.Database)
+    UserModel.setup(database)
     return UserModel
 }
 
@@ -46,6 +58,7 @@ function configureDIC() {
     const dependencyContainer = new Container()
     configureCommonContainer(dependencyContainer)
     configureUserContainer(dependencyContainer)
+    configureOrganizationContainer(dependencyContainer)
     configureAuthContainer(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
     db.drop().then(() => {
