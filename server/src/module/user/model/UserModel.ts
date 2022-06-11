@@ -1,10 +1,12 @@
-import { DataTypes, Model, Sequelize } from "sequelize/types"
+import { injectable } from "inversify"
+import { DataTypes, Model, Sequelize } from "sequelize"
 import { User } from "../Entity/User"
 import { IUserCreate } from "../interface/IUserCreate"
 
+@injectable()
 export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
     id!: number
-    name!: string
+    email!: string
     password!: string
     role_id!: number
     kPublic!: string
@@ -17,7 +19,7 @@ export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
                 autoIncrement: true,
                 primaryKey: true
             },
-            name: {
+            email: {
                 unique: true,
                 type: DataTypes.STRING,
                 allowNull: false
@@ -31,6 +33,7 @@ export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
                 allowNull: false,
             },
             kPublic: {
+                unique: true,
                 type: DataTypes.STRING,
                 allowNull: false,
             }

@@ -1,16 +1,19 @@
 import { Application, NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
-import { IUserCreate } from "../interface/IUserCreate"
 import { IUserService } from "../interface/IUserService"
-import { validate } from 'class-validator'
-import { IUserController } from "../interface/IUserController"
-import { ParamsDictionary } from "express-serve-static-core"
-import { ParsedQs } from "qs"
 
+import { IUserController } from "../interface/IUserController"
+import { TYPES } from "../../../config/inversify.types"
+import { inject, injectable } from "inversify"
+import { IUserCreate } from "../interface/IUserCreate"
+import { bodyValidator } from "../../common/helper/bodyValidator"
+import { validateCreateUserDto } from "../helper/create_dto_validator"
+
+@injectable()
 export class UserController implements IUserController {
     private ROUTE_BASE: string
     constructor(
-        private userService: IUserService
+        @inject(TYPES.User.Service) private userService: IUserService,
     ) {
         this.ROUTE_BASE = "/user"
         this.userService = userService
@@ -24,12 +27,9 @@ export class UserController implements IUserController {
 
     async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const dto = req.body as unknown as IUserCreate
-            const validationErrors = await validate(dto)
-            if (validationErrors.length) {
-                throw Error(`Validation failed. errors: ${validationErrors}`)
-            }
-            const createdUser = await this.userService.createUser(dto)
+            const dto: IUserCreate = req.body
+            const validatedDto = await bodyValidator(validateCreateUserDto, dto)
+            const createdUser = await this.userService.createUser(validatedDto)
             res.status(StatusCodes.CREATED).send(createdUser)
         } catch (err) {
             next(err)
