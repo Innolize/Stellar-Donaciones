@@ -7,6 +7,7 @@ import { AuthService } from "../module/auth/service/AuthService"
 import { AuthController } from "../module/auth/controller/AuthController"
 import multer, { memoryStorage, Multer } from "multer"
 import { OrganizationCrontroller, OrganizationModel, OrganizationRepository, OrganizationService } from "../module/organization/module"
+import { ProjectModel } from "../module/project/model/ProjectModel"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -19,6 +20,16 @@ const configureDatabase = () => {
         host: 'localhost',
         port: Number(<string>process.env.DATABASE_PORT)
     })
+}
+
+const configureProjectModel = (container: Container) => {
+    const database = container.get<Sequelize>(TYPES.Common.Database)
+    ProjectModel.setup(database)
+    return ProjectModel
+}
+
+const configureProjectContainer = (container: Container) => {
+    container.bind<typeof ProjectModel>(TYPES.Project.Model).toConstantValue(configureProjectModel(container))
 }
 
 const configureOrganizationModel = (container: Container) => {
@@ -62,6 +73,7 @@ function configureDIC() {
     configureCommonContainer(dependencyContainer)
     configureUserContainer(dependencyContainer)
     configureOrganizationContainer(dependencyContainer)
+    configureProjectContainer(dependencyContainer)
     configureAuthContainer(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
     db.drop().then(() => {
