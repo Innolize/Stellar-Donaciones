@@ -31,4 +31,10 @@ export class UserRepository implements IUserRepository {
         if (userFound) return userFound
         else return false
     };
+
+    async findUserById(id: number): Promise<User | null> {
+        const userFound = await this.userModel.findByPk(id)
+        if (userFound) return userFound
+        else return null
+    };
 }
