@@ -1,9 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from '../pages/Login';
-import SignUp from '../pages/SignUp';
-import Home from '../pages/Home';
-import Proyect from '../pages/Proyect';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../components/Layout';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import Profile from '../pages/Profile';
+import Proyect from '../pages/Proyect';
+import SignUp from '../pages/SignUp';
 
 const AppRoutes = () => {
   return (
@@ -11,8 +12,9 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />}></Route>
-          <Route path="login" element={<Login />}></Route>
-          <Route path="signup" element={<SignUp />}></Route>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="proyects/:id" element={<Proyect />}></Route>
         </Route>
       </Routes>
