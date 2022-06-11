@@ -1,6 +1,6 @@
 import { IOrganizationCreate } from "../interface/IOgranizationCreate";
 
-export class User implements IOrganizationCreate {
+export class Organization implements IOrganizationCreate {
     constructor(
         public id: number,
         public email: string,
