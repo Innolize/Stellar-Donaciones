@@ -1,15 +1,16 @@
-import { useMutation } from 'react-query';
 import { useContext } from 'react';
-import api from '../services/api';
+import { useMutation } from 'react-query';
 import { UserContext } from '../context/UserProvider';
+import api from '../services/api';
 
 const useLogin = () => {
   const { setUser } = useContext(UserContext);
   return useMutation(loginUser, {
     onSuccess: (user) => {
-      localStorage.setItem('token', user.accessToken);
+      localStorage.setItem('token', user.access_token);
       setUser(user);
     },
+    retry: false,
   });
 };
 
