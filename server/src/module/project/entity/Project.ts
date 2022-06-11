@@ -1,11 +1,16 @@
-export class Project {
+import { Organization } from "../../organization/entity/Organization";
+import { IProject } from "../interface/IProject";
+
+export class Project implements IProject {
     constructor(
-        public id: number,
-        public objetivo: number,
-        public nombre: string,
-        public imagen: string,
-        public descripcion: string,
-        public desde: Date,
-        public hasta: Date
+        public author_id: number,
+        public objective: number,
+        public name: string,
+        public description: string,
+        public from: Date,
+        public to: Date,
+        public id?: number,
+        public image?: string,
+        public Author?: Organization
     ) { }
 }
