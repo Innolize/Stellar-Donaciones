@@ -33,7 +33,6 @@ export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
                 allowNull: false,
             },
             kPublic: {
-                unique: true,
                 type: DataTypes.STRING,
                 allowNull: false,
             }
