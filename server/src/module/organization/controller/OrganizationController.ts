@@ -16,7 +16,6 @@ export class OrganizationCrontroller {
     configureRoutes(app: Application) {
         const ROUTE = this.ROUTE_BASE
         app.post(`/api${ROUTE}`, this.findById.bind(this))
-
     }
 
     async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
