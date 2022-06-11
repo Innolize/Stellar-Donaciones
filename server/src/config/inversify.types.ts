@@ -1,7 +1,8 @@
 export const TYPES = {
     Common: {
         Database: Symbol("Database"),
-        Encryption: Symbol("Encription")
+        Encryption: Symbol("Encription"),
+        FormMiddleware: Symbol("Multer")
     },
     User: {
         Model: Symbol("UserModel"),

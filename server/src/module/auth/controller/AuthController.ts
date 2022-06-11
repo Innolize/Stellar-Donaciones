@@ -1,5 +1,6 @@
 import { Application, NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
+import { Multer } from "multer";
 import { TYPES } from "../../../config/inversify.types";
 import { bodyValidator } from "../../common/helper/bodyValidator";
 import { validateCreateUserDto } from "../../user/helper/create_dto_validator";
@@ -14,14 +15,15 @@ export class AuthController {
     private ROUTE: string
     constructor(
         @inject(TYPES.Auth.Service) private authService: AuthService,
-        @inject(TYPES.User.Service) private userService: IUserService
+        @inject(TYPES.User.Service) private userService: IUserService,
+        @inject(TYPES.Common.FormMiddleware) private formMiddleware: Multer
     ) {
         this.ROUTE = "/auth"
     }
 
     configureRoutes = (app: Application) => {
         const ROUTE = this.ROUTE
-        app.post(`/api${ROUTE}/signup`, this.signup.bind(this))
+        app.post(`/api${ROUTE}/signup`, this.formMiddleware.none(), this.signup.bind(this))
         app.post(`/api${ROUTE}`, localAuthentication, this.login.bind(this))
     }
 
