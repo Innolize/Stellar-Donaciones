@@ -1,11 +1,8 @@
-import { Container } from '@mui/system';
+import { Box, Button, CircularProgress, Container, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import useSignUp from '../hooks/useSignUp';
-import { Box, Typography } from '@mui/material';
+import { Navigate } from 'react-router-dom';
 import * as yup from 'yup';
-import CircularProgress from '@mui/material/CircularProgress';
+import useSignUp from '../hooks/useSignUp';
 
 const validationSchema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required.'),
@@ -88,6 +85,8 @@ const SignUp = () => {
             )}
           </Box>
         </form>
+
+        {signUp.isSuccess && <Navigate to="/"></Navigate>}
       </Box>
     </Container>
   );
