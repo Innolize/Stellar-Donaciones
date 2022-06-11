@@ -17,6 +17,4 @@ export class OrganizationRepository implements IOrganizationRepository {
         }
         return organization
     }
-
-
 }

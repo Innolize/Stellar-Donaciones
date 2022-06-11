@@ -6,7 +6,7 @@ import { Container } from "inversify"
 import { AuthService } from "../module/auth/service/AuthService"
 import { AuthController } from "../module/auth/controller/AuthController"
 import multer, { memoryStorage, Multer } from "multer"
-import { OrganizationModel } from "../module/organization/module"
+import { OrganizationModel, OrganizationRepository } from "../module/organization/module"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -29,6 +29,7 @@ const configureOrganizationModel = (container: Container) => {
 
 const configureOrganizationContainer = (container: Container) => {
     container.bind<typeof OrganizationModel>(TYPES.Organization.Model).toConstantValue(configureOrganizationModel(container))
+    container.bind<OrganizationRepository>(TYPES.Organization.Repository).to(OrganizationRepository)
 }
 
 function configureCommonContainer(container: Container): void {
