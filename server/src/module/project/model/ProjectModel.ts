@@ -6,6 +6,15 @@ import { IProjectCreate } from "../interface/IProjectCreate";
 
 @injectable()
 export class ProjectModel extends Model<Project, IProjectCreate>{
+    author_id!: number
+    name!: string
+    objective!: number
+    description!: string
+    from!: Date
+    to!: Date
+    id!: number
+    image!: string
+    
     static setup(database: Sequelize): typeof ProjectModel {
         ProjectModel.init({
             id: {
