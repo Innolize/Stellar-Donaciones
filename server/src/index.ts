@@ -4,18 +4,23 @@ dotenv.config()
 import express, { NextFunction, Request, Response } from 'express';
 import container from './config/inversify';
 import { init as initUserModule } from './module/user/module'
+import { init as initAuthModule } from './module/auth/module'
 import { StatusCodes } from "http-status-codes";
 import cors from 'cors'
 import morgan from 'morgan'
+import passport from "passport";
+import { configurePassportStrategies } from "./module/auth/strategies";
 
 const app = express()
 app.use(express.urlencoded({
   extended: true
 }))
+app.use(passport.initialize())
+configurePassportStrategies(container, passport)
 
-app.use(express.json())
 
 initUserModule(app, container)
+initAuthModule(app, container)
 
 const PORT = process.env.PORT || 8000
 
@@ -32,7 +37,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
 app.use(function (req: Request, res: Response, next: NextFunction) {
   const method = req.method
   const route = req.originalUrl
-  res.status(404).send({
+  res.status(StatusCodes.NOT_FOUND).send({
     "method": method,
     "route": route,
     'error': "Route not found"
