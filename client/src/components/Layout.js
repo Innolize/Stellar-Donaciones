@@ -1,13 +1,15 @@
-import { Container } from '@mui/system';
+import { Container } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const Layout = () => {
   return (
-    <Container>
+    <>
       <Navbar></Navbar>
-      <Outlet />
-    </Container>
+      <Container>
+        <Outlet />
+      </Container>
+    </>
   );
 };
 
