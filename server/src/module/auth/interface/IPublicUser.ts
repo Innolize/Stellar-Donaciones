@@ -1,3 +1,7 @@
 import { IUserCreate } from '../../user/interface/IUserCreate'
 
-export type IPublicUser = Pick<IUserCreate, "email" | "kPublic" | "id">;
+export interface IPublicUser {
+    email: string,
+    kPublic: string,
+    id: number
+}

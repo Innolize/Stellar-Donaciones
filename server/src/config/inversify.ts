@@ -3,6 +3,8 @@ import { UserController, UserModel, UserRepository, UserService } from "../modul
 import bcrypt from 'bcrypt'
 import { TYPES } from "./inversify.types"
 import { Container } from "inversify"
+import { AuthService } from "../module/auth/service/AuthService"
+import { AuthController } from "../module/auth/controller/AuthController"
 
 
 const configureDatabase = () => {
@@ -30,17 +32,22 @@ const configureUserContainer = (container: Container): void => {
     container.bind<UserController>(TYPES.User.Controller).to(UserController)
 }
 
+const configureAuthContainer = (container: Container): void => {
+    container.bind<AuthService>(TYPES.Auth.Service).to(AuthService)
+    container.bind<AuthController>(TYPES.Auth.Controller).to(AuthController)
+}
 function configureDIC() {
     const dependencyContainer = new Container()
     configureCommonContainer(dependencyContainer)
     configureUserContainer(dependencyContainer)
+    configureAuthContainer(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
-    db.drop().then(()=>{
-        db.sync({}).then(()=>{
+    db.drop().then(() => {
+        db.sync({ force: true }).then(() => {
             console.log('database ready')
         })
     })
-    
+
     return dependencyContainer
 }
 
