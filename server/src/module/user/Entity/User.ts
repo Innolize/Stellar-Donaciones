@@ -1,4 +1,4 @@
-import { IUserCreate } from "../interface/IUserInterface";
+import { IUserCreate } from "../interface/IUserCreate";
 
 export class User implements IUserCreate {
     constructor(
