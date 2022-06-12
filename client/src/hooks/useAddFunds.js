@@ -9,7 +9,7 @@ const useAddFunds = (values) => {
 };
 
 async function addFunds({ amount }) {
-  return await api.post(`api/trasaction/fund/${amount}`);
+  return await api.post(`api/transaction/fund/${amount}`);
 }
 
 export default useAddFunds;
