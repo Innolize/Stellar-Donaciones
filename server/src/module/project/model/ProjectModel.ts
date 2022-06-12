@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { DataTypes, Model, Sequelize } from "sequelize/types";
+import { Association, DataTypes, Model, Sequelize } from "sequelize";
 import { OrganizationModel } from "../../organization/module";
 import { Project } from "../entity/Project";
 import { IProjectCreate } from "../interface/IProjectCreate";
@@ -8,13 +8,13 @@ import { IProjectCreate } from "../interface/IProjectCreate";
 export class ProjectModel extends Model<Project, IProjectCreate>{
     author_id!: number
     name!: string
-    objective!: number
+    goal!: number
     description!: string
     from!: Date
     to!: Date
     id!: number
     image!: string
-    
+
     static setup(database: Sequelize): typeof ProjectModel {
         ProjectModel.init({
             id: {
@@ -34,7 +34,7 @@ export class ProjectModel extends Model<Project, IProjectCreate>{
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            objective: {
+            goal: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
@@ -67,5 +67,7 @@ export class ProjectModel extends Model<Project, IProjectCreate>{
         return ProjectModel
     }
 
-
+    public static associations: {
+        organization: Association<ProjectModel, OrganizationModel>
+    }
 }

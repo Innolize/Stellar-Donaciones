@@ -1,6 +1,6 @@
 export interface IProject {
     author_id: number
-    objective: number
+    goal: number
     name: string
     description: string
     from: Date

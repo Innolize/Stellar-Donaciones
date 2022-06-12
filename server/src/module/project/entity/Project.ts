@@ -4,7 +4,7 @@ import { IProject } from "../interface/IProject";
 export class Project implements IProject {
     constructor(
         public author_id: number,
-        public objective: number,
+        public goal: number,
         public name: string,
         public description: string,
         public from: Date,

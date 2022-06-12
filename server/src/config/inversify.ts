@@ -8,6 +8,9 @@ import { AuthController } from "../module/auth/controller/AuthController"
 import multer, { memoryStorage, Multer } from "multer"
 import { OrganizationCrontroller, OrganizationModel, OrganizationRepository, OrganizationService } from "../module/organization/module"
 import { ProjectModel } from "../module/project/model/ProjectModel"
+import { ProjectRepository } from "../module/project/repository/ProjectRepository"
+import { ProjectService } from "../module/project/service/ProjectService"
+import { ProjectController } from "../module/project/controller/ProjectController"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -30,6 +33,9 @@ const configureProjectModel = (container: Container) => {
 
 const configureProjectContainer = (container: Container) => {
     container.bind<typeof ProjectModel>(TYPES.Project.Model).toConstantValue(configureProjectModel(container))
+    container.bind<ProjectRepository>(TYPES.Project.Repository).to(ProjectRepository)
+    container.bind<ProjectService>(TYPES.Project.Service).to(ProjectService)
+    container.bind<ProjectController>(TYPES.Project.Controller).to(ProjectController)
 }
 
 const configureOrganizationModel = (container: Container) => {
@@ -68,6 +74,10 @@ const configureAuthContainer = (container: Container): void => {
     container.bind<AuthService>(TYPES.Auth.Service).to(AuthService)
     container.bind<AuthController>(TYPES.Auth.Controller).to(AuthController)
 }
+
+const associations = (container: Container) => {
+    ProjectModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Project.Model))
+}
 function configureDIC() {
     const dependencyContainer = new Container()
     configureCommonContainer(dependencyContainer)
@@ -75,6 +85,7 @@ function configureDIC() {
     configureOrganizationContainer(dependencyContainer)
     configureProjectContainer(dependencyContainer)
     configureAuthContainer(dependencyContainer)
+    associations(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
     db.drop().then(() => {
         db.sync({ force: true }).then(() => {
