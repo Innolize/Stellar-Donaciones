@@ -24,7 +24,9 @@ export class AuthController {
     configureRoutes = (app: Application) => {
         const ROUTE = this.ROUTE
         app.post(`/api${ROUTE}/signup`, this.formMiddleware.none(), this.signup.bind(this))
-        app.post(`/api${ROUTE}`, jwtAuthentication, this.login.bind(this))
+        app.post(`/api${ROUTE}`, localAuthentication, this.login.bind(this))
+        app.post(`/api${ROUTE}/me`, this.verifyToken.bind(this))
+
     }
 
     async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -50,5 +52,18 @@ export class AuthController {
             next(err)
         }
 
+    }
+
+    async verifyToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            if (!req.headers.authorization) {
+                res.status(403).send({ message: "Tu petición no tiene cabecera de autorización" })
+            }
+            const token = req.headers.authorization!.split(" ")[1]
+            const { ...clientResponse } = await this.authService.verifyToken(token)
+            res.status(200).send(clientResponse)
+        } catch (err) {
+            next(err)
+        }
     }
 }
