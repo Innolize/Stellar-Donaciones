@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 // import api from '../services/api';
-import axios from 'axios';
+import mockApi from '../services/mockApi';
 
 const useGetOrganization = (orgId) => {
   return useQuery(['organization', orgId], () => getOrganization(orgId), {
@@ -12,8 +12,8 @@ const useGetOrganization = (orgId) => {
 
 async function getOrganization(orgId) {
   try {
-    // const response = await api.get('/organization');
-    const response = await axios.get(`https://62a5188c47e6e400639b98d3.mockapi.io/organization/${orgId}`);
+    // const response = await api.get(`/organization/${orgId}`);
+    const response = await mockApi.get(`/organization/${orgId}`);
     return response.data;
   } catch (e) {
     throw new Error(e);

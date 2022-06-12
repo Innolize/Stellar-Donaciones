@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 // import api from '../services/api';
-import axios from 'axios';
+import mockApi from '../services/mockApi';
 
 const useGetProyect = (proyectId) => {
   return useQuery(['proyect', proyectId], () => getProyect(proyectId), {
@@ -11,8 +11,8 @@ const useGetProyect = (proyectId) => {
 
 async function getProyect(proyectId) {
   try {
-    // const response = await api.get('/proyects');
-    const response = await axios.get(`https://62a5188c47e6e400639b98d3.mockapi.io/proyects/${proyectId}`);
+    // const response = await api.get(`/proyects/${proyectId}`);
+    const response = await mockApi.get(`/proyects/${proyectId}`);
     return response.data;
   } catch (e) {
     throw new Error(e);
