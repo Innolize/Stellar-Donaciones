@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Association, DataTypes, Model, Sequelize } from "sequelize/types";
+import { Association, DataTypes, Model, Sequelize } from "sequelize";
 import { Organization } from "../../organization/entity/Organization";
 import { OrganizationModel } from "../../organization/module";
 import { Project } from "../../project/entity/Project";
