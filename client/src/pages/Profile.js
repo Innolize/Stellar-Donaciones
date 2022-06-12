@@ -1,5 +1,7 @@
-import { Box, CircularProgress, Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useContext } from 'react';
+import ErrorMessage from '../components/ErrorMessage';
+import LoadingAnimation from '../components/LoadingAnimation';
 import ProfileCard from '../components/ProfileCard';
 import TransactionList from '../components/TransactionList';
 import { UserContext } from '../context/UserProvider';
@@ -12,21 +14,11 @@ const Profile = () => {
   const getPayments = useGetPayments(user.kPublic);
 
   if (getBalance.isLoading || getPayments.isLoading) {
-    return (
-      <Box mt={2} display="flex" justifyContent="center">
-        <CircularProgress></CircularProgress>
-      </Box>
-    );
+    return <LoadingAnimation />;
   }
 
   if (getBalance.isError || getPayments.isError) {
-    return (
-      <Box mt={4} display="flex" justifyContent="center">
-        <Typography variant="h4" color="error">
-          Something went wrong.
-        </Typography>
-      </Box>
-    );
+    return <ErrorMessage error="We could not load your profile" />;
   }
 
   return (
