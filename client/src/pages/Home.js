@@ -71,7 +71,7 @@ const Home = () => {
             </Grid>
             <Grid item xs={9}>
               <Link style={{ textDecoration: 'none' }} to={'/proyects/' + proyect.id}>
-                <ProyectCard proyect={proyect} />
+                <ProyectCard proyect={proyect} actionArea />
               </Link>
             </Grid>
             <Divider sx={{ width: '100%' }}></Divider>
