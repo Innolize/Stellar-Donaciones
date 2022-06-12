@@ -65,7 +65,7 @@ const Home = () => {
       .number()
       .required('Enter an amount')
       .positive('The amount must be greater than 0')
-      .max(user.balance, 'The amount cannot be greater than your balance'),
+      .max(user?.balance, 'The amount cannot be greater than your balance'),
   });
 
   return (
@@ -74,7 +74,7 @@ const Home = () => {
         validationSchema={validationSchema}
         isLoading={donate.isLoading}
         title={'Make a donation to: ' + proyect.name}
-        text={'You have ' + user.balance + ' XML in your wallet. How much do you want to donate?'}
+        text={'You have ' + user?.balance + ' XML in your wallet. How much do you want to donate?'}
         isError={donate.isError}
         open={open}
         handleClose={handleClose}
