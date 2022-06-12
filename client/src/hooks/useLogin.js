@@ -6,9 +6,9 @@ import api from '../services/api';
 const useLogin = () => {
   const { setUser } = useContext(UserContext);
   return useMutation(loginUser, {
-    onSuccess: (user) => {
-      localStorage.setItem('token', user.access_token);
-      setUser(user);
+    onSuccess: (response) => {
+      localStorage.setItem('token', response.data.access_token);
+      setUser(response.data.user);
     },
     retry: false,
   });
