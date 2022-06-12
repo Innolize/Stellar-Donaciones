@@ -68,7 +68,7 @@ const SignUp = () => {
             />
           </Box>
           <Box display="flex" justifyContent="center">
-            <Button color="secondary" variant="contained" size="large" type="submit">
+            <Button disabled={signUp.isLoading} color="secondary" variant="contained" size="large" type="submit">
               Sign Up
             </Button>
           </Box>
