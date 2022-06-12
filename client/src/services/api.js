@@ -4,7 +4,7 @@ let base_url;
 if (process.env.NODE_ENV === 'production') {
   base_url = '';
 } else if (process.env.NODE_ENV === 'development') {
-  base_url = 'http://localhost:4000';
+  base_url = 'http://localhost:8000';
 }
 
 const api = axios.create({
