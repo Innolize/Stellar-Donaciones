@@ -15,7 +15,7 @@ const useRefreshCredentials = () => {
 };
 
 async function refreshCredentials() {
-  return await api.post('api/auth');
+  return await api.post('api/auth/me');
 }
 
 export default useRefreshCredentials;
