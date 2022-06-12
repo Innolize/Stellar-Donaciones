@@ -40,7 +40,7 @@ export class UserService implements IUserService {
         return await this.userRepository.findUserByEmail(name)
     }
 
-    async findUserById(id: number): Promise<User | null> {
+    async findUserById(id: number): Promise<User> {
         return await this.userRepository.findUserById(id)
     }
 
