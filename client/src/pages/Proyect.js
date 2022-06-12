@@ -21,9 +21,11 @@ const Proyect = () => {
 
   return (
     <Box m={2}>
-      <Box ml={4}>
+      <Box m={4}>
         <Link component={RouterLink} to={'/organizations/' + getOrganization.data.id}>
-          <Typography variant="h5">Organization: {getOrganization.data.email}</Typography>
+          <Typography align="center" variant="h5">
+            This proyect was created by the organization: {getOrganization.data.email}
+          </Typography>
         </Link>
       </Box>
       <ProyectCard variant="detailed" proyect={getProyect.data} />
