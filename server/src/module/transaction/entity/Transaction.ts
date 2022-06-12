@@ -1,6 +1,6 @@
-import { ITransaction } from "../interface/ITransaction";
+import { ITransactionCreate } from "../interface/ITransaction";
 
-export class Transaction implements ITransaction {
+export class Transaction implements ITransactionCreate {
     constructor(
         public id: number,
         public amount: number,
