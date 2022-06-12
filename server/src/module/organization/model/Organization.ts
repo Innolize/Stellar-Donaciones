@@ -1,18 +1,19 @@
 import { injectable } from "inversify"
 import { DataTypes, Model, Sequelize } from "sequelize"
-import { User } from "../Entity/User"
-import { IUserCreate } from "../interface/IUserCreate"
+import { Organization } from "../entity/Organization"
+import { IOrganizationCreate } from "../interface/IOgranizationCreate"
 
 @injectable()
-export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
+export class OrganizationModel extends Model<Organization, IOrganizationCreate> implements IOrganizationCreate {
     id!: number
     email!: string
     password!: string
+    role_id!: number
     kPublic!: string
     kPrivate!: string
 
-    static setup(database: Sequelize): typeof UserModel {
-        UserModel.init({
+    static setup(database: Sequelize): typeof OrganizationModel {
+        OrganizationModel.init({
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -38,9 +39,9 @@ export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
         },
             {
                 sequelize: database,
-                modelName: "User",
+                modelName: "Organization",
             }
         )
-        return UserModel
+        return OrganizationModel
     }
 }

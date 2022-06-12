@@ -9,7 +9,7 @@ import { IPublicUser } from '../interface/IPublicUser'
 const options: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: <string>process.env.JWT_SECRET,
-    ignoreExpiration: true
+    ignoreExpiration: false
 }
 
 export const configureJwtStrategy = (UserRepository: IUserRepository, passport: PassportStatic): void => {
@@ -23,9 +23,9 @@ export const configureJwtStrategy = (UserRepository: IUserRepository, passport: 
                     const publicUser: IPublicUser = rest
                     return done(null, publicUser)
                 }
+                return done(new Error('jwt error'), false)
             } catch (error) {
                 return done(new Error('jwt error'), false)
-
             }
         }
     ))

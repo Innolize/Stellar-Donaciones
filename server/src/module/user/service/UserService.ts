@@ -6,6 +6,7 @@ import CryptoJS from 'crypto-js'
 import { IUserService } from "../interface/IUserService"
 import { inject, injectable } from "inversify"
 import { TYPES } from "../../../config/inversify.types"
+import { StellarRepository } from "../../stellar/module"
 
 @injectable()
 export class UserService implements IUserService {
@@ -13,7 +14,8 @@ export class UserService implements IUserService {
     private encryption: typeof bcrypt
     constructor(
         @inject(TYPES.User.Repository) userRepository: IUserRepository,
-        @inject(TYPES.Common.Encryption) encryption: typeof bcrypt
+        @inject(TYPES.Common.Encryption) encryption: typeof bcrypt,
+        @inject(TYPES.Stellar.Repository) private stellarRepository: StellarRepository
     ) {
         this.userRepository = userRepository
         this.encryption = encryption
@@ -22,22 +24,21 @@ export class UserService implements IUserService {
     async createUser(user: IUserCreate): Promise<User> {
         try {
             await this.userRepository.findUserByEmail(user.email)
+            const keys = await this.stellarRepository.createAccount()
             const hashedPassword = await this._hashPassword(user.password)
-            const hashKPrivate = this._hashKPrivate(user.password)
-            const userHashed: IUserCreate = { ...user, password: hashedPassword, kPrivate: hashKPrivate }
+            const userHashed: IUserCreate = { ...user, password: hashedPassword, kPublic: keys.publicKey, kPrivate: keys.privateKey }
             return await this.userRepository.createUser(userHashed)
         } catch (error) {
             console.log(error)
             throw new Error()
         }
-
     }
 
     async findUserByEmail(name: string): Promise<User | false> {
         return await this.userRepository.findUserByEmail(name)
     }
 
-    async findUserById(id: number): Promise<User | null> {
+    async findUserById(id: number): Promise<User> {
         return await this.userRepository.findUserById(id)
     }
 

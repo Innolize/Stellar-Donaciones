@@ -5,6 +5,9 @@ import express, { NextFunction, Request, Response } from 'express';
 import container from './config/inversify';
 import { init as initUserModule } from './module/user/module'
 import { init as initAuthModule } from './module/auth/module'
+import { init as initOrganizationModule } from './module/organization/module'
+import { init as initProjectModule } from './module/organization/module'
+import { init as initTransactionModule } from './module/transaction/module'
 import { StatusCodes } from "http-status-codes";
 import cors from 'cors'
 import morgan from 'morgan'
@@ -12,24 +15,32 @@ import passport from "passport";
 import { configurePassportStrategies } from "./module/auth/strategies";
 
 const app = express()
+app.use(passport.initialize())
+configurePassportStrategies(container, passport)
+
+app.use(cors({ credentials: true, origin: <string>process.env.ORIGIN_API_CONSUMER }))
+app.use(morgan('dev'))
+
+app.use(express.json())
 app.use(express.urlencoded({
   extended: true
 }))
-app.use(passport.initialize())
-configurePassportStrategies(container, passport)
+
 
 
 initUserModule(app, container)
 initAuthModule(app, container)
+initOrganizationModule(app, container)
+initProjectModule(app, container)
+initTransactionModule(app, container)
 
 const PORT = process.env.PORT || 8000
 
-app.use(cors({credentials: true, origin: <string>process.env.ORIGIN_API_CONSUMER}))
-app.use(morgan('dev'))
+
 
 //si encuentra algun error imprevisto
 app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
-  console.log(err.stack)
+  console.log(err)
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err.message })
 })
 
