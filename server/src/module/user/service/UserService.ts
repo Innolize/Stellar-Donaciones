@@ -26,14 +26,12 @@ export class UserService implements IUserService {
             await this.userRepository.findUserByEmail(user.email)
             const keys = await this.stellarRepository.createAccount()
             const hashedPassword = await this._hashPassword(user.password)
-            const hashKPrivate = this._hashKPrivate(keys.privateKey)
-            const userHashed: IUserCreate = { ...user, password: hashedPassword, kPublic: keys.publicKey, kPrivate: hashKPrivate }
+            const userHashed: IUserCreate = { ...user, password: hashedPassword, kPublic: keys.publicKey, kPrivate: keys.privateKey }
             return await this.userRepository.createUser(userHashed)
         } catch (error) {
             console.log(error)
             throw new Error()
         }
-
     }
 
     async findUserByEmail(name: string): Promise<User | false> {

@@ -2,11 +2,11 @@ import { Application, NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../config/inversify.types";
 import { AuthService } from "../../auth/service/AuthService";
-import { jwtAuthentication } from "../../auth/util/passportMiddlewares";
+import { jwtAuthentication, localAuthentication } from "../../auth/util/passportMiddlewares";
 import { StellarService } from "../../stellar/module";
 import { UserService } from "../../user/module";
 
-injectable()
+@injectable()
 export class TransactionController {
     ROUTE: string
     constructor(
@@ -17,6 +17,7 @@ export class TransactionController {
     }
     configureRoutes(app: Application) {
         const ROUTE = this.ROUTE
+        app.post(`/api${ROUTE}/fund/:amount`, jwtAuthentication, this.fund.bind(this))
         app.post(`/api${ROUTE}/:destination/:amount`, jwtAuthentication, this.makeTransaction.bind(this))
     }
 
@@ -31,18 +32,30 @@ export class TransactionController {
                 throw Error('No hay usuario')
             }
             const fullUser = await this.userService.findUserById(user.id)
-            const userpk = this._decryptPrivateKey(fullUser.kPrivate)
             const numberAmount = Number(amount)
-            const tx = await this.stellarService.makeTransaction(userpk, destination, numberAmount)
+            const tx = await this.stellarService.makeTransaction(fullUser.kPrivate, destination, numberAmount)
             res.status(200).send(tx)
         } catch (err) {
             throw Error('Error en transaccion')
         }
     }
+    fund = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = req.user
+            const { amount } = req.params
+            if (!amount) {
+                throw Error('Parametros incorrectos')
+            }
+            if (!user) {
+                throw Error('No hay usuario')
+            }
+            const userToFundPublicKey = user.kPublic
+            const numberAmount = Number(amount)
+            const tx = await this.stellarService.makeTransaction(<string>process.env.APP_MAIN_ACCOUNT, userToFundPublicKey, numberAmount)
+            res.status(200).send(tx)
 
-    private _decryptPrivateKey = (privateKey: string): string => {
-        const decrypted = CryptoJS.AES.decrypt(privateKey, <string>process.env.CRYPTO_SECRET);
-        return decrypted.toString(CryptoJS.enc.Utf8)
+        } catch (err) {
+            throw Error('Error en transaccion')
+        }
     }
-
 }

@@ -7,6 +7,7 @@ import { init as initUserModule } from './module/user/module'
 import { init as initAuthModule } from './module/auth/module'
 import { init as initOrganizationModule } from './module/organization/module'
 import { init as initProjectModule } from './module/organization/module'
+import { init as initTransactionModule } from './module/transaction/module'
 import { StatusCodes } from "http-status-codes";
 import cors from 'cors'
 import morgan from 'morgan'
@@ -31,6 +32,7 @@ initUserModule(app, container)
 initAuthModule(app, container)
 initOrganizationModule(app, container)
 initProjectModule(app, container)
+initTransactionModule(app, container)
 
 const PORT = process.env.PORT || 8000
 
@@ -38,7 +40,7 @@ const PORT = process.env.PORT || 8000
 
 //si encuentra algun error imprevisto
 app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
-  console.log(err.stack)
+  console.log(err)
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err.message })
 })
 

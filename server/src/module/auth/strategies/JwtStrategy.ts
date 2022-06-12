@@ -23,6 +23,7 @@ export const configureJwtStrategy = (UserRepository: IUserRepository, passport: 
                     const publicUser: IPublicUser = rest
                     return done(null, publicUser)
                 }
+                return done(new Error('jwt error'), false)
             } catch (error) {
                 return done(new Error('jwt error'), false)
             }

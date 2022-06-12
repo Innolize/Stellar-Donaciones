@@ -23,31 +23,38 @@ export class StellarRepository {
     }
 
     transaction = async (originSecret: string, destinationPublic: string, amount: number) => {
-        await this.checkIfAccountExists(destinationPublic)
-        const originKeys = StellarSDK.Keypair.fromSecret(originSecret)
-        const originAccount = await this.server.loadAccount(originKeys.publicKey())
-        const transaction = new StellarSDK.TransactionBuilder(originAccount, {
-            fee: StellarSDK.BASE_FEE,
-            networkPassphrase: StellarSDK.Networks.TESTNET
-        })
-            .addOperation(
-                StellarSDK.Operation.payment({
-                    destination: destinationPublic,
-                    asset: StellarSDK.Asset.native(),
-                    amount: amount.toString()
-                })
-            )
-            .addMemo(StellarSDK.Memo.text("Test Transaction"))
-            .setTimeout(180)
-            .build();
-        transaction.sign(originKeys)
-        return await this.server.submitTransaction(transaction)
+        try {
+            await this.checkIfAccountExists(destinationPublic)
+            const originKeys = StellarSDK.Keypair.fromSecret(originSecret)
+
+            const originAccount = await this.server.loadAccount(originKeys.publicKey())
+            const transaction = new StellarSDK.TransactionBuilder(originAccount, {
+                fee: StellarSDK.BASE_FEE,
+                networkPassphrase: StellarSDK.Networks.TESTNET
+            })
+                .addOperation(
+                    StellarSDK.Operation.payment({
+                        destination: destinationPublic,
+                        asset: StellarSDK.Asset.native(),
+                        amount: amount.toString()
+                    })
+                )
+                .addMemo(StellarSDK.Memo.text("Test Transaction"))
+                .setTimeout(180)
+                .build();
+            transaction.sign(originKeys)
+            return await this.server.submitTransaction(transaction)
+        } catch (error) {
+            console.log(error)
+            throw Error('stellar repository error')
+        }
+
     }
 
 
     checkIfAccountExists = async (publicKey: string) => {
         try {
-            await this.server.loadAccount(publicKey)
+            return await this.server.loadAccount(publicKey)
         } catch (error) {
             throw new Error("La cuenta no existe!")
         }

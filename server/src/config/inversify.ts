@@ -15,6 +15,7 @@ import { TransactionModel } from "../module/transaction/model/TransactionModel"
 import { TransactionRepository } from "../module/transaction/repository/TransactionRepository"
 import { TransactionService } from "../module/transaction/service/TransactionService"
 import { StellarRepository, StellarService } from "../module/stellar/module"
+import { TransactionController } from "../module/transaction/module"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -43,6 +44,7 @@ const configureTransactionContainer = (container: Container) => {
     container.bind<typeof TransactionModel>(TYPES.Transaction.Model).toConstantValue(configureTransactionModel(container))
     container.bind<TransactionRepository>(TYPES.Transaction.Repository).to(TransactionRepository)
     container.bind<TransactionService>(TYPES.Transaction.Service).to(TransactionService)
+    container.bind<TransactionController>(TYPES.Transaction.Controller).to(TransactionController)
 
 }
 
@@ -113,6 +115,11 @@ function configureDIC() {
     configureAuthContainer(dependencyContainer)
     associations(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
+    // db.drop().then(() => {
+    //     db.sync({ force: true }).then(() => {
+    //         console.log('database ready')
+    //     })
+    // })
 
     return dependencyContainer
 }
