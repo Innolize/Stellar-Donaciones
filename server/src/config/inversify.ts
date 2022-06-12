@@ -13,6 +13,7 @@ import { ProjectService } from "../module/project/service/ProjectService"
 import { ProjectController } from "../module/project/controller/ProjectController"
 import { TransactionModel } from "../module/transaction/model/TransactionModel"
 import { TransactionRepository } from "../module/transaction/repository/TransactionRepository"
+import { TransactionService } from "../module/transaction/service/TransactionService"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -35,6 +36,7 @@ const configureTransactionModel = (container: Container) => {
 const configureTransactionContainer = (container: Container) => {
     container.bind<typeof TransactionModel>(TYPES.Transaction.Model).toConstantValue(configureTransactionModel(container))
     container.bind<TransactionRepository>(TYPES.Transaction.Repository).to(TransactionRepository)
+    container.bind<TransactionService>(TYPES.Transaction.Service).to(TransactionService)
 
 }
 
@@ -90,6 +92,9 @@ const configureAuthContainer = (container: Container): void => {
 
 const associations = (container: Container) => {
     ProjectModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Project.Model))
+    TransactionModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Organization.Model))
+    TransactionModel.setupProjectAssociation(container.get<typeof ProjectModel>(TYPES.Project.Model))
+    TransactionModel.setupUserAssociation(container.get<typeof UserModel>(TYPES.User.Model))
 }
 function configureDIC() {
     const dependencyContainer = new Container()

@@ -18,8 +18,8 @@ export class TransactionRepository implements ITransactionRepository {
         return transaction
     }
 
-    async getAllByProject(project_id: string): Promise<Transaction[]> {
-        return await this.transactionModel.findAll({ where: { project_id: project_id } })
+    async getAllByProject(project_id: number): Promise<Transaction[]> {
+        return await this.transactionModel.findAll({ where: { project_id } })
     }
 
 }

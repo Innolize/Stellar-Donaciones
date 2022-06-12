@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { Association, DataTypes, Model, Sequelize } from "sequelize/types";
 import { Organization } from "../../organization/entity/Organization";
 import { OrganizationModel } from "../../organization/module";
@@ -8,6 +9,7 @@ import { UserModel } from "../../user/module";
 import { Transaction } from "../entity/Transaction";
 import { ITransactionCreate } from "../interface/ITransaction";
 
+@injectable()
 export class TransactionModel extends Model<Transaction, ITransactionCreate> implements ITransactionCreate {
     amount!: number;
     user_id!: string;
