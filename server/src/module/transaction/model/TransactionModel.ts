@@ -1,6 +1,8 @@
 import { Association, DataTypes, Model, Sequelize } from "sequelize/types";
 import { Organization } from "../../organization/entity/Organization";
 import { OrganizationModel } from "../../organization/module";
+import { Project } from "../../project/entity/Project";
+import { ProjectModel } from "../../project/module";
 import { User } from "../../user/Entity/User";
 import { UserModel } from "../../user/module";
 import { Transaction } from "../entity/Transaction";
@@ -13,7 +15,8 @@ export class TransactionModel extends Model<Transaction, ITransactionCreate> imp
     project_id!: number;
     id!: number;
     Organization?: Organization;
-    User?: User
+    User?: User;
+    Project?: Project
 
     static setup(database: Sequelize): typeof TransactionModel {
         TransactionModel.init({
@@ -59,8 +62,16 @@ export class TransactionModel extends Model<Transaction, ITransactionCreate> imp
         })
     }
 
+    static setupProjectAssociation(model: typeof ProjectModel): void {
+        TransactionModel.hasOne(model, {
+            as: "Project",
+            foreignKey: "project_id"
+        })
+    }
+
     public static associations: {
         user: Association<TransactionModel, UserModel>
         organization: Association<TransactionModel, OrganizationModel>
+        project: Association<TransactionModel, OrganizationModel>
     }
 }

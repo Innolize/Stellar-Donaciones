@@ -12,6 +12,7 @@ import { ProjectRepository } from "../module/project/repository/ProjectRepositor
 import { ProjectService } from "../module/project/service/ProjectService"
 import { ProjectController } from "../module/project/controller/ProjectController"
 import { TransactionModel } from "../module/transaction/model/TransactionModel"
+import { TransactionRepository } from "../module/transaction/repository/TransactionRepository"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -33,6 +34,8 @@ const configureTransactionModel = (container: Container) => {
 
 const configureTransactionContainer = (container: Container) => {
     container.bind<typeof TransactionModel>(TYPES.Transaction.Model).toConstantValue(configureTransactionModel(container))
+    container.bind<TransactionRepository>(TYPES.Transaction.Repository).to(TransactionRepository)
+
 }
 
 const configureProjectModel = (container: Container) => {
