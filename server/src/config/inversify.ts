@@ -14,6 +14,7 @@ import { ProjectController } from "../module/project/controller/ProjectControlle
 import { TransactionModel } from "../module/transaction/model/TransactionModel"
 import { TransactionRepository } from "../module/transaction/repository/TransactionRepository"
 import { TransactionService } from "../module/transaction/service/TransactionService"
+import { StellarRepository, StellarService } from "../module/stellar/module"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -26,6 +27,11 @@ const configureDatabase = () => {
         host: 'localhost',
         port: Number(<string>process.env.DATABASE_PORT)
     })
+}
+
+const configureStellarContainer = (container: Container) => {
+    container.bind<StellarRepository>(TYPES.Stellar.Repository).to(StellarRepository)
+    container.bind<StellarService>(TYPES.Stellar.Service).to(StellarService)
 }
 
 const configureTransactionModel = (container: Container) => {
@@ -99,6 +105,7 @@ const associations = (container: Container) => {
 function configureDIC() {
     const dependencyContainer = new Container()
     configureCommonContainer(dependencyContainer)
+    configureStellarContainer(dependencyContainer)
     configureUserContainer(dependencyContainer)
     configureOrganizationContainer(dependencyContainer)
     configureProjectContainer(dependencyContainer)

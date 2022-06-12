@@ -31,5 +31,9 @@ export const TYPES = {
         Repository: Symbol("TransactionRepository"),
         Service: Symbol("TransactionService"),
         Controller: Symbol("TransactionController")
+    },
+    Stellar: {
+        Repository: Symbol("StellarRepository"),
+        Service: Symbol("StellarService")
     }
 }
