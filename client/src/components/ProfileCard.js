@@ -4,7 +4,7 @@ import profileImage from '../assets/profile-image.png';
 const ProfileCard = ({ userEmail, assets }) => {
   return (
     <Box mt={3}>
-      <Card elevation={5} sx={{ maxWidth: 345 }}>
+      <Card elevation={5} sx={{ margin: 'auto', maxWidth: 345 }}>
         <Box mt={2} display="flex" alignItems="center" flexDirection="column">
           <Box
             component="img"
