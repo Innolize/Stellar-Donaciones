@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import profileImage from '../assets/profile-image.png';
 
-const ProfileCard = ({ userEmail, assets }) => {
+const ProfileCard = ({ userEmail, assets, handleClickAddFunds }) => {
   return (
     <Box mt={3}>
       <Card elevation={5} sx={{ margin: 'auto', maxWidth: 345 }}>
@@ -40,7 +40,7 @@ const ProfileCard = ({ userEmail, assets }) => {
           </Box>
         </CardContent>
         <Box m={1}>
-          <Button fullWidth variant="contained" color="secondary" size="large">
+          <Button onClick={handleClickAddFunds} fullWidth variant="contained" color="secondary" size="large">
             Add more funds
           </Button>
         </Box>
