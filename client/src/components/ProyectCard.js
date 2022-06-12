@@ -18,6 +18,10 @@ const ProyectCard = ({ proyect, variant }) => {
       dayDiff++;
     }
 
+    if (dayDiff <= 0 && hourDiff <= 0 && minDiff <= 0) {
+      return 'Already ended';
+    }
+
     return `${dayDiff} days, ${hourDiff} hours and ${minDiff} minutes left. `;
   };
 
@@ -70,7 +74,7 @@ const ProyectCard = ({ proyect, variant }) => {
 
               <Box mt={4}>
                 <Typography align="center" variant="h6" color="darkgreen">
-                  The goal ends in: {timeToFinish(proyect.to)}
+                  Time left: {timeToFinish(proyect.to)}
                 </Typography>
               </Box>
             </Box>
