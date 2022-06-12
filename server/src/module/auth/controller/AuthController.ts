@@ -16,7 +16,7 @@ export class AuthController {
     constructor(
         @inject(TYPES.Auth.Service) private authService: AuthService,
         @inject(TYPES.User.Service) private userService: IUserService,
-        @inject(TYPES.Common.FormMiddleware) private formMiddleware: Multer
+        @inject(TYPES.Common.FormMiddleware) private formMiddleware: Multer,
     ) {
         this.ROUTE = "/auth"
     }
