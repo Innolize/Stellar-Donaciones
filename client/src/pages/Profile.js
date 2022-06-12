@@ -14,11 +14,9 @@ import useAddFunds from '../hooks/useAddFunds';
 const Profile = () => {
   const { user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
-  // const getBalance = useGetBalance(user.kPublic);
-  // const getPayments = useGetPayments(user.kPublic);
+  const getBalance = useGetBalance(user.kPublic);
+  const getPayments = useGetPayments(user.kPublic);
   const addFunds = useAddFunds();
-  const getBalance = useGetBalance('GAKPPJNV375FQIXARXDIR5PUILOLRWV3MXVTXLJ44JR67UTZ6P4OTDD4');
-  const getPayments = useGetPayments('GAKPPJNV375FQIXARXDIR5PUILOLRWV3MXVTXLJ44JR67UTZ6P4OTDD4');
 
   if (getBalance.isLoading || getPayments.isLoading) {
     return <LoadingAnimation />;
