@@ -36,9 +36,11 @@ export class UserRepository implements IUserRepository {
         else return false
     };
 
-    async findUserById(id: number): Promise<User | null> {
-        const userFound = await this.userModel.findByPk(id, { raw: true })
-        if (userFound) return userFound
-        else return null
+    async findUserById(id: number): Promise<User> {
+        const user = await this.userModel.findByPk(id, { raw: true })
+        if (!user) {
+            throw Error('No se encontro usuario!')
+        }
+        return user
     };
 }

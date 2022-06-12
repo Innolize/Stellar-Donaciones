@@ -92,9 +92,9 @@ const configureAuthContainer = (container: Container): void => {
 
 const associations = (container: Container) => {
     ProjectModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Project.Model))
-    TransactionModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Organization.Model))
-    TransactionModel.setupProjectAssociation(container.get<typeof ProjectModel>(TYPES.Project.Model))
-    TransactionModel.setupUserAssociation(container.get<typeof UserModel>(TYPES.User.Model))
+    // TransactionModel.setupOrganizationAssociation(container.get<typeof OrganizationModel>(TYPES.Organization.Model))
+    // TransactionModel.setupProjectAssociation(container.get<typeof ProjectModel>(TYPES.Project.Model))
+    // TransactionModel.setupUserAssociation(container.get<typeof UserModel>(TYPES.User.Model))
 }
 function configureDIC() {
     const dependencyContainer = new Container()
@@ -106,11 +106,6 @@ function configureDIC() {
     configureAuthContainer(dependencyContainer)
     associations(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
-    db.drop().then(() => {
-        db.sync({ force: true }).then(() => {
-            console.log('database ready')
-        })
-    })
 
     return dependencyContainer
 }

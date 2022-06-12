@@ -8,7 +8,6 @@ export class UserModel extends Model<User, IUserCreate> implements IUserCreate {
     id!: number
     email!: string
     password!: string
-    role_id!: number
     kPublic!: string
     kPrivate!: string
 

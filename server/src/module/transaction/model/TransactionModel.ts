@@ -50,12 +50,12 @@ export class TransactionModel extends Model<Transaction, ITransactionCreate> imp
         return TransactionModel
     }
 
-    static setupUserAssociation(model: typeof UserModel): void {
-        TransactionModel.hasOne(model, {
-            as: "User",
-            foreignKey: "user_id"
-        })
-    }
+    // static setupUserAssociation(model: typeof UserModel): void {
+    //     TransactionModel.hasOne(model, {
+    //         as: "User",
+    //         foreignKey: "user_id"
+    //     })
+    // }
 
     static setupOrganizationAssociation(model: typeof OrganizationModel): void {
         TransactionModel.hasOne(model, {

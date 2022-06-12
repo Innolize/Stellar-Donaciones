@@ -14,15 +14,17 @@ import passport from "passport";
 import { configurePassportStrategies } from "./module/auth/strategies";
 
 const app = express()
+app.use(passport.initialize())
+configurePassportStrategies(container, passport)
 
 app.use(cors({ credentials: true, origin: <string>process.env.ORIGIN_API_CONSUMER }))
 app.use(morgan('dev'))
+
 app.use(express.json())
 app.use(express.urlencoded({
   extended: true
 }))
-app.use(passport.initialize())
-configurePassportStrategies(container, passport)
+
 
 
 initUserModule(app, container)

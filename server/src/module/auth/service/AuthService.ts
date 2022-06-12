@@ -26,7 +26,7 @@ export class AuthService {
         }
     }
 
-    signAccessToken(payload: { sub: number | undefined }): string {
-        return sign(payload, <string>process.env.JWT_SECRET)
+    signAccessToken(payload: { sub: number }): string {
+        return sign(payload, <string>process.env.JWT_SECRET, { expiresIn: "6h" })
     }
 }

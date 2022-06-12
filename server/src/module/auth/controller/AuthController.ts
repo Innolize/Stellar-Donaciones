@@ -8,7 +8,7 @@ import { IUserCreate } from "../../user/interface/IUserCreate";
 import { IUserService } from "../../user/interface/IUserService";
 import { IPublicUser } from "../interface/IPublicUser";
 import { AuthService } from "../service/AuthService";
-import { localAuthentication } from "../util/passportMiddlewares";
+import { jwtAuthentication, localAuthentication } from "../util/passportMiddlewares";
 
 @injectable()
 export class AuthController {
@@ -24,12 +24,11 @@ export class AuthController {
     configureRoutes = (app: Application) => {
         const ROUTE = this.ROUTE
         app.post(`/api${ROUTE}/signup`, this.formMiddleware.none(), this.signup.bind(this))
-        app.post(`/api${ROUTE}`, localAuthentication, this.login.bind(this))
+        app.post(`/api${ROUTE}`, jwtAuthentication, this.login.bind(this))
     }
 
     async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            console.log(req.body)
             const dto: IUserCreate = req.body
             const validatedDto = await bodyValidator(validateCreateUserDto, dto)
             const { id } = await this.userService.createUser(validatedDto)
