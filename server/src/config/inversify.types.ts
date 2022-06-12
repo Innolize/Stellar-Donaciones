@@ -25,5 +25,11 @@ export const TYPES = {
         Repository: Symbol("ProjectRepository"),
         Service: Symbol("ProjectService"),
         Controller: Symbol("ProjectController")
+    },
+    Transaction: {
+        Model: Symbol("TransactionModel"),
+        Repository: Symbol("TransactionRepository"),
+        Service: Symbol("TransactionService"),
+        Controller: Symbol("TransactionController")
     }
 }

@@ -11,6 +11,7 @@ import { ProjectModel } from "../module/project/model/ProjectModel"
 import { ProjectRepository } from "../module/project/repository/ProjectRepository"
 import { ProjectService } from "../module/project/service/ProjectService"
 import { ProjectController } from "../module/project/controller/ProjectController"
+import { TransactionModel } from "../module/transaction/model/TransactionModel"
 
 function configureUploadMiddleware() {
     const storage = memoryStorage()
@@ -23,6 +24,15 @@ const configureDatabase = () => {
         host: 'localhost',
         port: Number(<string>process.env.DATABASE_PORT)
     })
+}
+
+const configureTransactionModel = (container: Container) => {
+    const database = container.get<Sequelize>(TYPES.Common.Database)
+    return TransactionModel.setup(database)
+}
+
+const configureTransactionContainer = (container: Container) => {
+    container.bind<typeof TransactionModel>(TYPES.Transaction.Model).toConstantValue(configureTransactionModel(container))
 }
 
 const configureProjectModel = (container: Container) => {
@@ -84,6 +94,7 @@ function configureDIC() {
     configureUserContainer(dependencyContainer)
     configureOrganizationContainer(dependencyContainer)
     configureProjectContainer(dependencyContainer)
+    configureTransactionContainer(dependencyContainer)
     configureAuthContainer(dependencyContainer)
     associations(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
