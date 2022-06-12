@@ -4,6 +4,7 @@ import { SnackbarProvider } from 'notistack';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import UserProvider from './context/UserProvider';
 import AppRoutes from './routes/AppRoutes';
+import RefreshCredentials from './services/refreshCredentials';
 import theme from './theme';
 
 const queryClient = new QueryClient();
@@ -13,10 +14,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <SnackbarProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AppRoutes />
-          </ThemeProvider>
+          <RefreshCredentials>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <AppRoutes />
+            </ThemeProvider>
+          </RefreshCredentials>
         </SnackbarProvider>
       </UserProvider>
     </QueryClientProvider>
