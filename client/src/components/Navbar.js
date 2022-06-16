@@ -13,11 +13,13 @@ import {
   Menu,
   Toolbar,
   Typography,
+  Badge,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserProvider';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
@@ -52,6 +54,11 @@ const Navbar = () => {
 
           {user ? (
             <div>
+              <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+                <Badge badgeContent={4} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
               <IconButton
                 size="large"
                 aria-label="account of current user"
