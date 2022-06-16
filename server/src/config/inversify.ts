@@ -114,11 +114,11 @@ function configureDIC() {
     configureAuthContainer(dependencyContainer)
     associations(dependencyContainer)
     const db = dependencyContainer.get<Sequelize>(TYPES.Common.Database)
-    // db.drop().then(() => {
-    //     db.sync({ force: true }).then(() => {
-    //         console.log('database ready')
-    //     })
-    // })
+    db.drop().then(() => {
+        db.sync({ force: true }).then(() => {
+            console.log('database ready')
+        })
+    })
 
     return dependencyContainer
 }
