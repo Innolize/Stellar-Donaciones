@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Container, Box, Grid } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
@@ -144,7 +144,7 @@ const Profile = () => {
   };
 
   return (
-    <>
+    <Container>
       <Box mt={3}>
         <Grid container spacing={{ xs: 1, sm: 2 }}>
           <Grid item xs={12} sm={4}>
@@ -169,7 +169,7 @@ const Profile = () => {
         handleClose={handleClose}
         submit={openConnectWindow}
       ></TransactionModal>
-    </>
+    </Container>
   );
 };
 

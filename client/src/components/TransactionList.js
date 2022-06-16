@@ -3,11 +3,10 @@ import { Box, Divider, List, ListItem, ListItemText, Typography } from '@mui/mat
 const TransactionList = ({ payments }) => {
   return (
     <Box>
-      <Typography align="center" variant="h3">
-        Transactions
-      </Typography>
       <List sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper', overflow: 'auto' }}>
-        <Typography variant="h4">Latest payments</Typography>
+        <Typography align="center" variant="h4">
+          Latest payments
+        </Typography>
         <Divider />
         {payments
           .filter((payment) => payment.type === 'payment' && payment.asset_type !== 'credit_alphanum4')

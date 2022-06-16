@@ -6,6 +6,7 @@ import UserProvider from './context/UserProvider';
 import AppRoutes from './routes/AppRoutes';
 import RefreshCredentials from './services/refreshCredentials';
 import theme from './theme';
+import './app.css';
 
 const queryClient = new QueryClient();
 

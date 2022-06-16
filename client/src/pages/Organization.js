@@ -1,15 +1,16 @@
-import { Box, Typography, Grid } from '@mui/material';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import { Box, Container, Grid, Typography } from '@mui/material';
+import Image from 'mui-image';
 import { Link, useParams } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
 import ProyectCard from '../components/ProyectCard';
-import useGetOrganization from '../hooks/useGetOrganization';
-import useGetBalance from '../hooks/useGetBalance';
-import useGetOrganizationProyects from '../hooks/useGetOrganizationProyects';
 import TransactionList from '../components/TransactionList';
+import useGetBalance from '../hooks/useGetBalance';
+import useGetOrganization from '../hooks/useGetOrganization';
+import useGetOrganizationProyects from '../hooks/useGetOrganizationProyects';
 import useGetPayments from '../hooks/useGetPayments';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 const Organization = () => {
   const { id } = useParams();
@@ -37,46 +38,25 @@ const Organization = () => {
   const orgBalance = getBalance.data.balances;
   const orgPayments = getPayments.data._embedded.records;
   const orgInfo = getOrganization.data;
-  const orgProyects = getOrganizationProyects.data;
+  const orgProyects = getOrganizationProyects.data.items;
   const goodVotes = getAmountOfVotes(orgBalance, 'GOOD');
   const badVotes = getAmountOfVotes(orgBalance, 'BAD');
   const percentageRep = (goodVotes / (goodVotes + badVotes)) * 100;
 
   return (
-    <Box>
-      <Box m={2}>
-        <Typography align="center" variant="h4">
-          Organization: {orgInfo.email}
-        </Typography>
-      </Box>
+    <Container>
       <Box m={5}>
-        <Typography variant="h6" align="center">
-          The reputacion of the organization is: {percentageRep.toFixed(0)}%
+        <Typography my={3} align="center" variant="h4">
+          {orgInfo.name}
         </Typography>
-
-        <Box p={1}>
-          <Typography align="center">User feedback</Typography>
-          <Box display="flex" justifyContent="center">
-            <Box m={1} display="flex">
-              <Box mx={2} display="flex">
-                <InsertEmoticonIcon></InsertEmoticonIcon>
-                <Typography display="inline">{goodVotes}</Typography>
-              </Box>
-
-              <Box mx={2} display="flex">
-                <SentimentVeryDissatisfiedIcon></SentimentVeryDissatisfiedIcon>
-                <Typography display="inline">{badVotes}</Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+        <Image height={500} src={orgInfo.image}></Image>
       </Box>
 
       <Grid container spacing={{ xs: 1, md: 7 }}>
         <Grid item xs={12} md={7}>
           <Box align="center">
             <Typography variant="h4" align="center">
-              Check out more proyects from this org
+              More proyects
             </Typography>
           </Box>
           {orgProyects.map((proyect) => (
@@ -88,10 +68,34 @@ const Organization = () => {
           ))}
         </Grid>
         <Grid item xs={12} md={5}>
+          <Box mt={1} display="flex" justifyContent="space-between">
+            <Typography variant="h5" align="center">
+              Reputation: {percentageRep.toFixed(0)}%
+            </Typography>
+
+            <Box alignItems="center" display="flex">
+              <Typography variant="h5" align="center">
+                Votes:
+              </Typography>
+              <Box mx={1} display="flex" alignItems="center">
+                <InsertEmoticonIcon size="lg"></InsertEmoticonIcon>
+                <Typography variant="h6" display="inline">
+                  {goodVotes}
+                </Typography>
+              </Box>
+
+              <Box mx={1} display="flex" alignItems="center">
+                <SentimentVeryDissatisfiedIcon size="large"></SentimentVeryDissatisfiedIcon>
+                <Typography variant="h6" display="inline">
+                  {badVotes}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
           <TransactionList payments={orgPayments}></TransactionList>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 };
 
