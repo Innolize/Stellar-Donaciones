@@ -4,7 +4,7 @@ import mockApi from '../services/mockApi';
 
 const useGetProyects = () => {
   return useQuery('proyects', getProyects, {
-    onSuccess: () => {},
+    onSuccess: () => { },
     retry: 5,
   });
 };
@@ -13,6 +13,7 @@ async function getProyects() {
   try {
     // const response = await api.get('/proyects');
     const response = await mockApi.get('/proyects');
+    console.log(response)
     return response.data;
   } catch (e) {
     throw new Error(e);

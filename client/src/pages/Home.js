@@ -80,7 +80,7 @@ const Home = () => {
         handleClose={handleClose}
         submit={handleDonation}
       ></TransactionModal>
-      {getProyects.data.map((proyect) => (
+      {getProyects && getProyects.data.items.map((proyect) => (
         <Fragment key={proyect.id}>
           <Grid item xs={12} sm={9}>
             <Link style={{ textDecoration: 'none' }} to={'/proyects/' + proyect.id}>
