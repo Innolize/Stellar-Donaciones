@@ -23,10 +23,9 @@ function configureUploadMiddleware() {
 }
 
 const configureDatabase = () => {
-    return new Sequelize(<string>process.env.DATABASE, <string>process.env.DATABASE_USERNAME, <string>process.env.DATABASE_PASSWORD, {
-        dialect: 'postgres',
-        host: 'localhost',
-        port: Number(<string>process.env.DATABASE_PORT)
+    return new Sequelize(<string>process.env.DATABASE_URL, {
+        username: <string>process.env.DATABASE_USERNAME,
+        password: <string>process.env.DATABASE_PASSWORD,
     })
 }
 
