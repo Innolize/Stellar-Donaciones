@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let base_url;
 if (process.env.NODE_ENV === 'production') {
-  base_url = '';
+  base_url = 'https://donation-stellar.herokuapp.com';
 } else if (process.env.NODE_ENV === 'development') {
   base_url = 'http://localhost:8000';
 }
