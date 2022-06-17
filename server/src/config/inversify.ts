@@ -26,6 +26,11 @@ const configureDatabase = () => {
     return new Sequelize(<string>process.env.DATABASE_URL, {
         username: <string>process.env.DATABASE_USERNAME,
         password: <string>process.env.DATABASE_PASSWORD,
+        dialectOptions: {
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
     })
 }
 
