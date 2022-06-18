@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useMutation } from 'react-query';
 import api from '../services/api';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from 'stellar-sdk'
 
 const useAddFunds = () => {
   const { enqueueSnackbar } = useSnackbar();
