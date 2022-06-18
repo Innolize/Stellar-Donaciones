@@ -22,8 +22,8 @@ async function addFunds({ amount }) {
 export const createTransactionXDR = async ({ originPublic, destinationPublic, amount }) => {
   const server = new StellarSdk.Server('https://horizon-testnet.stellar.org/');
   try {
-    const originAccountKeypar = StellarSdk.Keypair.fromPublicKey(originPublic)
-    const originAccount = await server.loadAccount(originAccountKeypar.publicKey())
+    const originAccountKeypar = StellarSdk.Keypair.fromPublicKey(originPublic);
+    const originAccount = await server.loadAccount(originAccountKeypar.publicKey());
     const transaction = new StellarSdk.TransactionBuilder(originAccount, {
       fee: StellarSdk.BASE_FEE,
       networkPassphrase: StellarSdk.Networks.TESTNET,
@@ -36,16 +36,15 @@ export const createTransactionXDR = async ({ originPublic, destinationPublic, am
           amount: amount.toString(),
         })
       )
-      .addMemo(StellarSdk.Memo.text("Test Transaction"))
+      .addMemo(StellarSdk.Memo.text('Test Transaction'))
       .setTimeout(180)
       .build();
 
-    return transaction.toEnvelope().toXDR('base64')
-
+    return transaction.toEnvelope().toXDR('base64');
   } catch (error) {
-    console.log(error)
-    throw Error('stellar error')
+    console.log(error);
+    throw Error('stellar error');
   }
-}
+};
 
 export default useAddFunds;

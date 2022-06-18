@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Container, Box, Grid } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
@@ -10,8 +10,7 @@ import useGetBalance from '../hooks/useGetBalance';
 import useGetPayments from '../hooks/useGetPayments';
 import * as yup from 'yup';
 import useAddFunds, { createTransactionXDR } from '../hooks/useAddFunds';
-import * as StellarSdk from 'stellar-sdk'
-
+import * as StellarSdk from 'stellar-sdk';
 
 const Profile = () => {
   const { user } = useContext(UserContext);
@@ -19,105 +18,84 @@ const Profile = () => {
   const getBalance = useGetBalance(user.kPublic);
   const getPayments = useGetPayments(user.kPublic);
   const addFunds = useAddFunds();
-  const [amount, setAmount] = useState(20)
-  const [txOriginPublicKey, setTxOriginPublicKey] = useState(null)
-  const [unsignedXdr, setUnsignedXdr] = useState(null)
+  const [amount, setAmount] = useState(20);
+  const [txOriginPublicKey, setTxOriginPublicKey] = useState(null);
+  const [unsignedXdr, setUnsignedXdr] = useState(null);
   const simpleSignerUrl = 'https://sign-test.plutodao.finance';
 
   useEffect(() => {
-    window.addEventListener('message', getAccountPublicKey)
-    window.addEventListener('message', signTx)
+    window.addEventListener('message', getAccountPublicKey);
+    window.addEventListener('message', signTx);
 
     async function createTransaction() {
       if (!!txOriginPublicKey) {
-        setUnsignedXdr(await createTransactionXDR({ originPublic: txOriginPublicKey, destinationPublic: user.kPublic, amount }))
+        setUnsignedXdr(
+          await createTransactionXDR({ originPublic: txOriginPublicKey, destinationPublic: user.kPublic, amount })
+        );
       }
     }
     async function sign() {
       if (unsignedXdr) {
-        console.log('entre al sign')
-        openSignWindow(unsignedXdr)
+        console.log('entre al sign');
+        openSignWindow(unsignedXdr);
       }
     }
 
-    createTransaction()
-    sign()
-    console.log(unsignedXdr)
+    createTransaction();
+    sign();
+    console.log(unsignedXdr);
 
     return () => {
-      window.removeEventListener('message', getAccountPublicKey)
-      window.removeEventListener('message', signTx)
-    }
-  }, [amount, txOriginPublicKey, unsignedXdr, user])
-
-
+      window.removeEventListener('message', getAccountPublicKey);
+      window.removeEventListener('message', signTx);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, txOriginPublicKey, unsignedXdr, user]);
 
   function openConnectWindow(amount) {
-    setAmount(amount)
-    window.open(
-      `${simpleSignerUrl}/connect`,
-      'Connect_Window',
-      'width=360, height=450',
-    );
+    setAmount(amount);
+    window.open(`${simpleSignerUrl}/connect`, 'Connect_Window', 'width=360, height=450');
   }
 
   async function openSignWindow(unsignedXdr) {
     const signWindow = window.open(
       `${simpleSignerUrl}/sign?xdr=${unsignedXdr}`,
       'Sign_Window',
-      'width=360, height=700',
+      'width=360, height=700'
     );
-    signWindow.postMessage(
-      { unsignedXdr, description: 'test-description' },
-      simpleSignerUrl,
-    );
-
+    signWindow.postMessage({ unsignedXdr, description: 'test-description' }, simpleSignerUrl);
 
     return signWindow;
   }
 
   const resetFundValues = () => {
-    setUnsignedXdr(null)
-    setTxOriginPublicKey(null)
-    setAmount(0)
-    setOpenModal(false)
-  }
-
+    setUnsignedXdr(null);
+    setTxOriginPublicKey(null);
+    setAmount(0);
+    setOpenModal(false);
+  };
 
   async function signTx(e) {
-    if (
-      e.origin === simpleSignerUrl &&
-      e.data.type === 'onSign' &&
-      e.data.page === 'sign'
-    ) {
-      console.log('ACA QUIERO LLEGAR')
+    if (e.origin === simpleSignerUrl && e.data.type === 'onSign' && e.data.page === 'sign') {
+      console.log('ACA QUIERO LLEGAR');
       const eventMessage = e.data;
 
       const signedXdr = eventMessage.message.signedXDR;
       // Validate the XDR, this is just good practice.
-      if (
-        StellarSdk.xdr.TransactionEnvelope.validateXDR(
-          signedXdr,
-          'base64',
-        )
-      ) {
-        const server = new StellarSdk.Server(
-          'https://horizon-testnet.stellar.org/',
-        ); //remember to update this to the correct value
+      if (StellarSdk.xdr.TransactionEnvelope.validateXDR(signedXdr, 'base64')) {
+        const server = new StellarSdk.Server('https://horizon-testnet.stellar.org/'); //remember to update this to the correct value
 
         // Construct the transaction from the signedXDR
         // see https://stellar.github.io/js-stellar-sdk/TransactionBuilder.html#.fromXDR
-        const transaction =
-          StellarSdk.TransactionBuilder.fromXDR(
-            signedXdr,
-            'Test SDF Network ; September 2015', //remember to update this to the correct value
-          );
+        const transaction = StellarSdk.TransactionBuilder.fromXDR(
+          signedXdr,
+          'Test SDF Network ; September 2015' //remember to update this to the correct value
+        );
 
         try {
-          const transactionResult =
-            await server.submitTransaction(transaction);
+          const transactionResult = await server.submitTransaction(transaction);
           console.log(transactionResult);
-          resetFundValues()
+          resetFundValues();
         } catch (err) {
           console.error(err);
         }
@@ -125,21 +103,19 @@ const Profile = () => {
     }
   }
 
-
   function getAccountPublicKey(e) {
     // Reject messages that are not coming from simple signer (tailor this according to your needs)
     if (e.origin !== `${simpleSignerUrl}`) {
       return;
     }
-    console.log('entre getAccountPublicKey')
+    console.log('entre getAccountPublicKey');
     const messageEvent = e.data;
 
     if (messageEvent.type === 'onConnect') {
       const publicKey = messageEvent.message.publicKey;
       // Validate the public key received. This is just good practice.
-      setTxOriginPublicKey(publicKey)
+      setTxOriginPublicKey(publicKey);
       console.log('The public key is', publicKey);
-
     }
   }
 
@@ -168,7 +144,7 @@ const Profile = () => {
   };
 
   return (
-    <>
+    <Container>
       <Box mt={3}>
         <Grid container spacing={{ xs: 1, sm: 2 }}>
           <Grid item xs={12} sm={4}>
@@ -193,7 +169,7 @@ const Profile = () => {
         handleClose={handleClose}
         submit={openConnectWindow}
       ></TransactionModal>
-    </>
+    </Container>
   );
 };
 

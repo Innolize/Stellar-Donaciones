@@ -6,7 +6,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Organization from '../pages/Organization';
 import Profile from '../pages/Profile';
-import Proyect from '../pages/Proyect';
+import Project from '../pages/Project';
 import SignUp from '../pages/SignUp';
 
 function RequireAuth() {
@@ -31,7 +31,7 @@ const AppRoutes = () => {
             <Route path="profile" element={<Profile />} />
           </Route>
           <Route path="organizations/:id" element={<Organization />} />
-          <Route path="proyects/:id" element={<Proyect />}></Route>
+          <Route path="projects/:id" element={<Project />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
