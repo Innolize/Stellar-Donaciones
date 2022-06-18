@@ -3,8 +3,8 @@ import { Fragment, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
-import ProyectCard from '../components/ProyectCard';
-import useGetProyects from '../hooks/useGetProyects';
+import ProjectCard from '../components/ProjectCard';
+import useGetProjects from '../hooks/useGetProjects';
 import Image from 'mui-image';
 import homeImg from '../assets/home.webp';
 import { makeStyles } from '@mui/styles';
@@ -32,7 +32,7 @@ const Home = () => {
   const myRef = useRef(null);
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const getProyects = useGetProyects(page, LIMIT);
+  const getProjects = useGetProjects(page, LIMIT);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -49,21 +49,21 @@ const Home = () => {
       </Box>
       <Container>
         <Typography ref={myRef} m={3} variant="h4" align="center">
-          Check out some proyects
+          Check out some projects
         </Typography>
-        {getProyects.isLoading ? (
+        {getProjects.isLoading ? (
           <Box height="100vh" mt={35}>
             <LoadingAnimation />
           </Box>
-        ) : getProyects.isError ? (
-          <ErrorMessage error="We could not load the proyects" />
+        ) : getProjects.isError ? (
+          <ErrorMessage error="We could not load the projects" />
         ) : (
           <Grid container spacing={{ xs: 1, sm: 2 }}>
-            {getProyects.data.items.map((proyect) => (
-              <Fragment key={proyect.id}>
+            {getProjects.data.items.map((project) => (
+              <Fragment key={project.id}>
                 <Grid item xs={6} sm={4}>
-                  <Link style={{ textDecoration: 'none' }} to={'/proyects/' + proyect.id}>
-                    <ProyectCard proyect={proyect} actionArea />
+                  <Link style={{ textDecoration: 'none' }} to={'/projects/' + project.id}>
+                    <ProjectCard project={project} actionArea />
                   </Link>
                 </Grid>
               </Fragment>
@@ -72,7 +72,7 @@ const Home = () => {
               <Pagination
                 page={page}
                 onChange={handleChange}
-                count={Math.round(Number(getProyects.data.count) / LIMIT)}
+                count={Math.round(Number(getProjects.data.count) / LIMIT)}
                 variant="outlined"
                 shape="rounded"
               />

@@ -5,11 +5,11 @@ import Image from 'mui-image';
 import { Link, useParams } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
-import ProyectCard from '../components/ProyectCard';
+import ProjectCard from '../components/ProjectCard';
 import TransactionList from '../components/TransactionList';
 import useGetBalance from '../hooks/useGetBalance';
 import useGetOrganization from '../hooks/useGetOrganization';
-import useGetOrganizationProyects from '../hooks/useGetOrganizationProyects';
+import useGetOrganizationProjects from '../hooks/useGetOrganizationProjects';
 import useGetPayments from '../hooks/useGetPayments';
 
 const Organization = () => {
@@ -17,16 +17,16 @@ const Organization = () => {
   const getOrganization = useGetOrganization(id);
   // const getBalance = useGetBalance(getOrganization.data?.kPublic);
   // const getPayments = useGetPayments(getOrganization.data?.kPublic);
-  // const getOrganizationProyects = useGetOrganizationProyects(getOrganization.data?.id);
+  // const getOrganizationProjects = useGetOrganizationProjects(getOrganization.data?.id);
   const getBalance = useGetBalance('GB624QTTEB2BGMTJKKCDX4NQ6ZTRTT7SIO3VQFJ6COMTSW5NERJF4EYD');
   const getPayments = useGetPayments('GBLJNDUPJKG4SNZMM44DGGHK7SF7JTKI5M4UVKVL7OYPDQTN5YFU6NQY');
-  const getOrganizationProyects = useGetOrganizationProyects('1');
+  const getOrganizationProjects = useGetOrganizationProjects('1');
 
-  if (getOrganization.isLoading || getPayments.isLoading || getBalance.isLoading || getOrganizationProyects.isLoading) {
+  if (getOrganization.isLoading || getPayments.isLoading || getBalance.isLoading || getOrganizationProjects.isLoading) {
     return <LoadingAnimation />;
   }
 
-  if (getOrganization.isError || getPayments.isError || getBalance.isError || getOrganizationProyects.isError) {
+  if (getOrganization.isError || getPayments.isError || getBalance.isError || getOrganizationProjects.isError) {
     return <ErrorMessage error="We could not load this page" />;
   }
 
@@ -38,7 +38,7 @@ const Organization = () => {
   const orgBalance = getBalance.data.balances;
   const orgPayments = getPayments.data._embedded.records;
   const orgInfo = getOrganization.data;
-  const orgProyects = getOrganizationProyects.data.items;
+  const orgProjects = getOrganizationProjects.data.items;
   const goodVotes = getAmountOfVotes(orgBalance, 'GOOD');
   const badVotes = getAmountOfVotes(orgBalance, 'BAD');
   const percentageRep = (goodVotes / (goodVotes + badVotes)) * 100;
@@ -56,13 +56,13 @@ const Organization = () => {
         <Grid item xs={12} md={7}>
           <Box align="center">
             <Typography variant="h4" align="center">
-              More proyects
+              More projects
             </Typography>
           </Box>
-          {orgProyects.map((proyect) => (
-            <Box key={proyect.id}>
-              <Link style={{ textDecoration: 'none' }} to={'/proyects/' + proyect.id}>
-                <ProyectCard proyect={proyect} actionArea />
+          {orgProjects.map((project) => (
+            <Box key={project.id}>
+              <Link style={{ textDecoration: 'none' }} to={'/projects/' + project.id}>
+                <ProjectCard project={project} actionArea />
               </Link>
             </Box>
           ))}

@@ -3,20 +3,20 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingAnimation from '../components/LoadingAnimation';
 import useGetOrganization from '../hooks/useGetOrganization';
-import useGetProyect from '../hooks/useGetProyect';
+import useGetProject from '../hooks/useGetProject';
 import Image from 'mui-image';
 import LinearProgressBar from '../components/LinearProgressBar';
 
-const Proyect = () => {
+const Project = () => {
   const { id } = useParams();
-  const getProyect = useGetProyect(id);
-  const getOrganization = useGetOrganization(getProyect.data?.author_id);
+  const getProject = useGetProject(id);
+  const getOrganization = useGetOrganization(getProject.data?.author_id);
 
-  if (getProyect.isLoading || getOrganization.isLoading) {
+  if (getProject.isLoading || getOrganization.isLoading) {
     return <LoadingAnimation />;
   }
 
-  if (getProyect.isError || getOrganization.isError) {
+  if (getProject.isError || getOrganization.isError) {
     return <ErrorMessage error="We could not load this page" />;
   }
 
@@ -54,18 +54,18 @@ const Proyect = () => {
     return date.toLocaleString('en-US', { minute: 'numeric', hour: 'numeric', hour12: true });
   };
 
-  const proyect = getProyect.data;
+  const project = getProject.data;
 
   return (
     <Container>
       <Box mt={5}>
         <Grid container spacing={{ xs: 1, sm: 2 }}>
           <Grid item sm={6}>
-            <Image src={proyect.image}></Image>
+            <Image src={project.image}></Image>
           </Grid>
           <Grid item sm={6}>
             <Typography align="center" variant="h4">
-              {proyect.name}
+              {project.name}
             </Typography>
             <Link component={RouterLink} to={'/organizations/' + getOrganization.data.id}>
               <Typography align="center" variant="subtitle2">
@@ -73,19 +73,19 @@ const Proyect = () => {
               </Typography>
             </Link>
             <Box my={2} mx={5}>
-              <Typography variant="body">{proyect.description}</Typography>
+              <Typography variant="body">{project.description}</Typography>
               <Box my={2}>
                 <Typography variant="h6">
-                  Started the day: {toDate(proyect.start)} at {getHoursSecondsMinutes(proyect.start)}
+                  Started the day: {toDate(project.start)} at {getHoursSecondsMinutes(project.start)}
                 </Typography>
                 <Typography variant="h6">
-                  Finishes the day: {toDate(proyect.to)} at {getHoursSecondsMinutes(proyect.to)}
+                  Finishes the day: {toDate(project.to)} at {getHoursSecondsMinutes(project.to)}
                 </Typography>
               </Box>
 
-              <Typography variant="h6">Goal: {proyect.goal} XML</Typography>
-              <LinearProgressBar value={proyect.progress} />
-              <Typography variant="subtitle">{Math.round(Number(proyect.raised))} XML raised.</Typography>
+              <Typography variant="h6">Goal: {project.goal} XML</Typography>
+              <LinearProgressBar value={project.progress} />
+              <Typography variant="subtitle">{Math.round(Number(project.raised))} XML raised.</Typography>
               <Box mt={3}>
                 <Button size="large" color="secondary" variant="contained">
                   Donate
@@ -93,7 +93,7 @@ const Proyect = () => {
               </Box>
               <Box mt={4}>
                 <Typography align="center" variant="body" color="darkgreen">
-                  Time left: {timeToFinish(proyect.to)}
+                  Time left: {timeToFinish(project.to)}
                 </Typography>
               </Box>
             </Box>
@@ -104,7 +104,7 @@ const Proyect = () => {
         <Grid mt={6} item xs={12} sm={6}>
           <Box>
             <Typography variant="h5">Comments</Typography>
-            {proyect.comments.map((comment) => (
+            {project.comments.map((comment) => (
               <Paper elevation={3} style={{ padding: '10px 10px', margin: '10px' }}>
                 <Grid container wrap="nowrap" spacing={2}>
                   <Grid item>
@@ -125,4 +125,4 @@ const Proyect = () => {
   );
 };
 
-export default Proyect;
+export default Project;
